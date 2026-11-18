@@ -24,6 +24,19 @@ npm run test:live
 The live scenario needs a reachable DSH installation and model access; it starts local mock
 SSH/HTTP endpoints and does not use production credentials.
 
+## Translations
+
+`README.md` is the canonical Simplified Chinese README; `README.en.md` is the complete English
+translation. To add another language:
+
+- copy `README.md` to `README.<language>.md` and translate the prose, not the code identifiers,
+  commands, tool names, or security claims;
+- keep the same section order and update the language bar in every README;
+- add the new file to the `files` array in `package.json` if it should ship on npm;
+- avoid machine-only translations without review, especially for security/credential wording.
+
+Open one PR with the new README and the language-bar updates.
+
 ## Code style
 
 - ESM only, no build step for Host or Client code.

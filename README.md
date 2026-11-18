@@ -4,7 +4,7 @@
 
 <p><strong>DSH 的凭据路由中枢：按标签匹配 SSH 主机与 PAT，凭据值不进入提示词、工具参数或工具结果。</strong></p>
 
-<p><a href="README.md">简体中文</a> · <a href="README.en.md">English</a></p>
+<p><a href="README.md">简体中文</a> · <a href="README.en.md">English</a> · <a href="CONTRIBUTING.md#translations">更多语言</a></p>
 
 <p>
   <a href="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml"><img src="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml/badge.svg?branch=main&amp;style=flat-square" alt="CI status" /></a>
@@ -13,9 +13,25 @@
   <a href="package.json"><img src="https://img.shields.io/badge/node-%3E%3D20-339933?style=flat-square&amp;logo=node.js&amp;logoColor=white" alt="Node" /></a>
 </p>
 
+<p>
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#工作原理">工作原理</a> ·
+  <a href="#工具">工具</a> ·
+  <a href="#加密同步">加密同步</a> ·
+  <a href="#安全模型">安全模型</a> ·
+  <a href="#配置">配置</a>
+</p>
+
+<p><code>dsh plugin --profile web add github:PandaBoby/dsh-credential-hub</code></p>
+
 </div>
 
 ---
+
+> [!IMPORTANT]
+> 本仓库是唯一官方来源：<https://github.com/PandaBoby/dsh-credential-hub>。
+> 插件不收集凭据；SSH 私钥只在 Host 内用于 `ssh`，有 `baseUrl` 时 PAT 默认只发往
+> 该 origin；导出的同步包只包含 AES-256-GCM 密文。
 
 `dsh-credential-hub` 为 [DeepSeek Harness](https://github.com/deepseek-ai) 提供一层**凭据路由**：
 维护 SSH 主机和 PAT 令牌的元数据清单，让模型用自然语言找到正确的 `alias`，再由 Host
@@ -32,13 +48,16 @@ AES-256-GCM 加密的换机同步。
 - [快速开始](#快速开始)
 - [工作原理](#工作原理)
 - [工具](#工具)
+- [使用场景](#使用场景)
 - [匹配与提示词](#匹配与提示词)
 - [加密同步](#加密同步)
 - [配置](#配置)
 - [安全模型](#安全模型)
 - [故障排查](#故障排查)
 - [开发与测试](#开发与测试)
+- [文档](#文档)
 - [已知限制](#已知限制)
+- [免责声明](#免责声明)
 - [参与贡献](#参与贡献)
 - [许可证](#许可证)
 
@@ -148,16 +167,21 @@ await ctx.credentials.set(credentialRef('PAT_GITHUB_PROD'), 'github_pat_...')
 
 ## 工作原理
 
-```text
-inventory.yml ──metadata──> system prompt section + credential_hub_match
-      │
-      └──credentialRef──> credential_hub_ssh_exec / credential_hub_pat_request
-                                  │
-                                  └── ctx.credentials.resolve()  (Host only)
-
-Settings UI ──authenticated routes──> inventory CRUD / config
-                                  └── ctx.credentials.set() / encrypted bundle
+```mermaid
+flowchart LR
+  I["inventory.yml<br/>alias / tags / credentialRef"] --> P["system prompt<br/>metadata only"]
+  I --> M["credential_hub_match"]
+  M --> T["ssh_exec / pat_request"]
+  T --> R["ctx.credentials.resolve<br/>Host only"]
+  R --> S["ssh"]
+  R --> H["fetch"]
+  U["Settings UI"] --> A["authenticated routes"]
+  A --> I
+  A --> C["ctx.credentials.set"]
+  A --> B["encrypted bundle"]
 ```
+
+<sub>图：元数据与凭据的两条路径；值只在 Host 侧解析。</sub>
 
 清单只存引用；值由 DSH 凭据服务保管。SSH/PAT 工具在 Host 侧解析值后直接交给 `ssh` 或
 `fetch`；模型只能看到元数据、退出状态和脱敏后的输出。
@@ -189,6 +213,24 @@ Settings UI ──authenticated routes──> inventory CRUD / config
 ← [{ alias: "prod-web-01", kind: "ssh", tags: ["env:production","service:web"], ... }]
 → credential_hub_ssh_exec({ alias: "prod-web-01", command: "tail -n 20 /var/log/web/app.log" })
 ← ssh prod-web-01 ... exit 0 ... <脱敏后的日志>
+```
+
+### 使用场景
+
+```text
+用户：去生产环境看下 web 日志
+→ credential_hub_match({ query: "生产环境 web 日志", kind: "ssh" })
+← [{ alias: "prod-web-01", kind: "ssh", tags: ["env:production","service:web"], ... }]
+→ credential_hub_ssh_exec({ alias: "prod-web-01", command: "tail -n 20 /var/log/web/app.log" })
+← ssh prod-web-01 ... exit 0 ... <脱敏后的日志>
+```
+
+```text
+用户：用生产令牌查一下 GitHub 仓库状态
+→ credential_hub_match({ query: "GitHub 生产令牌", kind: "pat" })
+← [{ alias: "github-prod-token", kind: "pat", ... }]
+→ credential_hub_pat_request({ alias: "github-prod-token", path: "/repos/acme/web" })
+← 200 OK ... {"status":"healthy", ...}
 ```
 
 ## 匹配与提示词
@@ -264,7 +306,7 @@ Settings UI ──authenticated routes──> inventory CRUD / config
    `ssh` 或 `fetch`；设置页只能 write-only 写入，不能读回明文。
 4. **结果二次脱敏。** SSH stdout/stderr 与 PAT 响应体会替换原始值、URL 编码、base64、
    Basic `user:secret` 和 PEM 每一行。
-5. **PAT 不跨 origin。** 默认只向记录 `baseUrl` 的 origin 发令牌；重定向默认不跟随。
+5. **PAT 不跨 origin。** 有 `baseUrl` 时默认只向该 origin 发令牌；重定向默认不跟随。
 6. **HTTP 明文限制。** 非 loopback 地址必须 HTTPS；`allowLoopbackHttp=false` 会连 loopback 也拒绝。
 7. **临时私钥 0600。** 私钥写入 `mkdtemp` 目录后交给 `ssh -i`，进程结束即删除。
 8. **加密包的明文只在 Host 内存。** 导出只返回密文；导入在 Host 解密、校验后写入；
@@ -302,6 +344,14 @@ npm run test:live  # 可选：真实 DSH + 模型 + 本地 mock SSH/HTTP
 详细验收记录见 [`docs/manual-tests.md`](docs/manual-tests.md) 和
 [`docs/ui-verification.md`](docs/ui-verification.md)。
 
+## 文档
+
+- [手动验收记录](docs/manual-tests.md)
+- [设置页验收记录](docs/ui-verification.md)
+- [变更日志](CHANGELOG.md)
+- [安全报告](SECURITY.md)
+- [贡献指南](CONTRIBUTING.md)
+
 ## 已知限制
 
 - **不支持 SSH 密码认证或带口令的私钥：** `BatchMode=yes` + `IdentitiesOnly=yes` 需要无口令私钥。
@@ -312,6 +362,11 @@ npm run test:live  # 可选：真实 DSH + 模型 + 本地 mock SSH/HTTP
 - **加密包仍含机密：** 持有文件和口令即可还原已配置凭据；口令丢失无法恢复，替换导入不会清理旧条目。
 - **保存运行配置会重启插件行：** 普通字段不是热更新；页面会提示重启。
 - **兼容性以 DSH 0.2.2-rc.3 实测：** 升级 DSH 后请先跑 `npm test` 与 live 验收。
+
+## 免责声明
+
+插件与其他 DSH 插件一样以你的用户权限运行，可以读写文件、访问网络并解析你配置的凭据。
+只安装你信任的源码；凭据边界见[安全模型](#安全模型)。本仓库不提供任何生产凭据。
 
 ## 参与贡献
 

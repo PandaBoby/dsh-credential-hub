@@ -4,7 +4,7 @@
 
 <p><strong>Credential routing for DSH: tag-matched SSH hosts and PAT tokens, with secret values kept out of prompts, tool arguments, and tool results.</strong></p>
 
-<p><a href="README.en.md">English</a> · <a href="README.md">简体中文</a></p>
+<p><a href="README.en.md">English</a> · <a href="README.md">简体中文</a> · <a href="CONTRIBUTING.md#translations">More languages</a></p>
 
 <p>
   <a href="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml"><img src="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml/badge.svg?branch=main&amp;style=flat-square" alt="CI status" /></a>
@@ -13,9 +13,26 @@
   <a href="package.json"><img src="https://img.shields.io/badge/node-%3E%3D20-339933?style=flat-square&amp;logo=node.js&amp;logoColor=white" alt="Node" /></a>
 </p>
 
+<p>
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#tools">Tools</a> ·
+  <a href="#encrypted-transfer">Encrypted transfer</a> ·
+  <a href="#security-model">Security model</a> ·
+  <a href="#configuration">Configuration</a>
+</p>
+
+<p><code>dsh plugin --profile web add github:PandaBoby/dsh-credential-hub</code></p>
+
 </div>
 
 ---
+
+> [!IMPORTANT]
+> This repository is the only official source: <https://github.com/PandaBoby/dsh-credential-hub>.
+> The plugin does not collect credentials; SSH keys are used only inside the Host, PATs with a
+> `baseUrl` are sent only to that origin by default, and exported bundles contain
+> AES-256-GCM ciphertext only.
 
 `dsh-credential-hub` adds a **credential routing layer** to
 [DeepSeek Harness](https://github.com/deepseek-ai). It keeps a metadata inventory of SSH hosts
@@ -35,13 +52,16 @@ page supports write-only value entry and AES-256-GCM encrypted transfer between 
 - [Quick start](#quick-start)
 - [How it works](#how-it-works)
 - [Tools](#tools)
+- [Example flows](#example-flows)
 - [Matching and prompts](#matching-and-prompts)
 - [Encrypted transfer](#encrypted-transfer)
 - [Configuration](#configuration)
 - [Security model](#security-model)
 - [Troubleshooting](#troubleshooting)
 - [Development and testing](#development-and-testing)
+- [Documentation](#documentation)
 - [Known limitations](#known-limitations)
+- [Disclaimer](#disclaimer)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -159,16 +179,21 @@ apply on the next operation.
 
 ## How it works
 
-```text
-inventory.yml ──metadata──> system prompt section + credential_hub_match
-      │
-      └──credentialRef──> credential_hub_ssh_exec / credential_hub_pat_request
-                                  │
-                                  └── ctx.credentials.resolve()  (Host only)
-
-Settings UI ──authenticated routes──> inventory CRUD / config
-                                  └── ctx.credentials.set() / encrypted bundle
+```mermaid
+flowchart LR
+  I["inventory.yml<br/>alias / tags / credentialRef"] --> P["system prompt<br/>metadata only"]
+  I --> M["credential_hub_match"]
+  M --> T["ssh_exec / pat_request"]
+  T --> R["ctx.credentials.resolve<br/>Host only"]
+  R --> S["ssh"]
+  R --> H["fetch"]
+  U["Settings UI"] --> A["authenticated routes"]
+  A --> I
+  A --> C["ctx.credentials.set"]
+  A --> B["encrypted bundle"]
 ```
+
+<sub>Metadata and credential paths; values are resolved only inside the Host.</sub>
 
 The inventory stores references only; the DSH credential service owns the values. SSH/PAT
 tools resolve inside the Host and pass values directly to `ssh` or `fetch`. The model sees
@@ -202,6 +227,24 @@ User: check the web logs in production
 ← [{ alias: "prod-web-01", kind: "ssh", tags: ["env:production","service:web"], ... }]
 → credential_hub_ssh_exec({ alias: "prod-web-01", command: "tail -n 20 /var/log/web/app.log" })
 ← ssh prod-web-01 ... exit 0 ... <redacted logs>
+```
+
+### Example flows
+
+```text
+User: check the web logs in production
+→ credential_hub_match({ query: "production web logs", kind: "ssh" })
+← [{ alias: "prod-web-01", kind: "ssh", tags: ["env:production","service:web"], ... }]
+→ credential_hub_ssh_exec({ alias: "prod-web-01", command: "tail -n 20 /var/log/web/app.log" })
+← ssh prod-web-01 ... exit 0 ... <redacted logs>
+```
+
+```text
+User: check the GitHub repository with the production token
+→ credential_hub_match({ query: "GitHub production token", kind: "pat" })
+← [{ alias: "github-prod-token", kind: "pat", ... }]
+→ credential_hub_pat_request({ alias: "github-prod-token", path: "/repos/acme/web" })
+← 200 OK ... {"status":"healthy", ...}
 ```
 
 ## Matching and prompts
@@ -288,7 +331,7 @@ the profile patch / YAML.
    value but cannot read it back in plaintext.
 4. **Results are redacted.** SSH stdout/stderr and PAT response bodies replace the raw value,
    URL-encoded value, base64 value, Basic `user:secret`, and individual PEM lines.
-5. **PATs stay on their origin.** Requests default to the record's `baseUrl` origin; redirects
+5. **PATs stay on their origin.** With a `baseUrl`, requests default to that origin; redirects
    are not followed by default.
 6. **Plain HTTP is restricted.** Non-loopback endpoints must use HTTPS; setting
    `allowLoopbackHttp=false` rejects loopback HTTP too.
@@ -332,6 +375,14 @@ npm run test:live  # optional: real DSH + model + local mock SSH/HTTP
 Detailed verification records are in [`docs/manual-tests.md`](docs/manual-tests.md) and
 [`docs/ui-verification.md`](docs/ui-verification.md).
 
+## Documentation
+
+- [Manual acceptance records](docs/manual-tests.md)
+- [Settings UI verification](docs/ui-verification.md)
+- [Changelog](CHANGELOG.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Known limitations
 
 - **No SSH password auth or passphrase-protected keys.** `BatchMode=yes` +
@@ -348,6 +399,13 @@ Detailed verification records are in [`docs/manual-tests.md`](docs/manual-tests.
 - **Saving runtime configuration restarts the plugin row.** Ordinary fields are not hot-reloaded.
 - **Compatibility is tested with DSH 0.2.2-rc.3.** Run `npm test` and the live acceptance after
   upgrading DSH.
+
+## Disclaimer
+
+Like any DSH plugin, this code runs with your user permissions and can read files, access the
+network, and resolve credentials you configure. Install only source you trust; the credential
+boundary is described in the [security model](#security-model). This repository ships no
+production credentials.
 
 ## Contributing
 
