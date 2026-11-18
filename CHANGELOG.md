@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [Unreleased]
+
+### Documentation
+
+- Chinese-first README with a full English translation, language switcher, CI/release/license/
+  Node badges, table of contents, architecture diagram, troubleshooting table, and clearer
+  configuration/security sections.
+
 ## [0.2.1] - 2026-11-18
 
 ### Fixed
