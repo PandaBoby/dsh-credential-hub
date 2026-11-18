@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Packaging
+
+- Publish `0.2.1` to npm; install with `dsh plugin --profile <profile> add dsh-credential-hub`.
+
 ### Documentation
 
 - Chinese-first README with a full English translation, language switcher, CI/release/license/

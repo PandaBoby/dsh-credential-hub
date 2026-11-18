@@ -8,6 +8,7 @@
 
 <p>
   <a href="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml"><img src="https://github.com/PandaBoby/dsh-credential-hub/actions/workflows/ci.yml/badge.svg?branch=main&amp;style=flat-square" alt="CI status" /></a>
+  <a href="https://www.npmjs.com/package/dsh-credential-hub"><img src="https://img.shields.io/npm/v/dsh-credential-hub?style=flat-square&amp;logo=npm&amp;color=cb3837" alt="npm" /></a>
   <a href="https://github.com/PandaBoby/dsh-credential-hub/releases"><img src="https://img.shields.io/github/v/release/PandaBoby/dsh-credential-hub?style=flat-square&amp;label=release" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License" /></a>
   <a href="package.json"><img src="https://img.shields.io/badge/node-%3E%3D20-339933?style=flat-square&amp;logo=node.js&amp;logoColor=white" alt="Node" /></a>
@@ -22,7 +23,7 @@
   <a href="#configuration">Configuration</a>
 </p>
 
-<p><code>dsh plugin --profile web add github:PandaBoby/dsh-credential-hub</code></p>
+<p><code>dsh plugin --profile web add dsh-credential-hub</code></p>
 
 </div>
 
@@ -98,7 +99,13 @@ page supports write-only value entry and AES-256-GCM encrypted transfer between 
 Desktop: **Settings → Plugins → Add plugin → Install local plugin directory**, then select
 this repository.
 
-CLI (custom profile):
+From npm (recommended):
+
+```sh
+dsh plugin --profile <profile> add dsh-credential-hub
+```
+
+From a local checkout:
 
 ```sh
 dsh plugin --profile <profile> add /absolute/path/to/dsh-credential-hub
