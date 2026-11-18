@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-18
+
+### Fixed
+
+- `npm test` now enumerates `test/*.test.mjs` explicitly instead of passing the
+  `test/` directory to `node --test`, which Node 20/22 treated as a module path.
+  This restores the GitHub Actions matrix (Node 20/22/24).
+
 ## [0.2.0] - 2026-11-18
 
 ### Added

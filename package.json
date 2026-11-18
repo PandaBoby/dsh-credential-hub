@@ -1,6 +1,6 @@
 {
   "name": "dsh-credential-hub",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Credential routing hub for DeepSeek Harness: tag-matched SSH hosts and PAT tokens, a Settings inventory/config UI, metadata-only prompt inventory, and Host-side secret resolution.",
   "type": "module",
   "main": "index.js",
@@ -58,7 +58,7 @@
   "scripts": {
     "check": "node test/support/check-syntax.mjs",
     "pretest": "npm run check",
-    "test": "node --test test/",
+    "test": "node test/support/run-tests.mjs",
     "test:unit": "node --test test/inventory.test.mjs test/matching.test.mjs test/tools.test.mjs test/prompt.test.mjs test/security.test.mjs test/settings.test.mjs test/client.test.mjs test/bundle.test.mjs",
     "test:security": "node --test test/security.test.mjs",
     "test:live": "node test/live-scenarios.mjs --live"

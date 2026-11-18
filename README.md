@@ -5,7 +5,7 @@
 > and can sync machines with an AES-256-GCM encrypted import/export bundle. The setup and
 > security details below are in Chinese.
 >
-> Status: 0.2.0, tested with DSH 0.2.2-rc.3. Repository:
+> Status: 0.2.1, tested with DSH 0.2.2-rc.3. Repository:
 > <https://github.com/PandaBoby/dsh-credential-hub>.
 
 DSH 的**凭据路由中枢**：维护一份 SSH 主机清单和一份 PAT 令牌清单，每条记录带 `alias`、`tags`、`description` 和 `credentialRef`。模型在对话里说“去生产环境看下 web 日志”或“用生产令牌查一下 GitHub 仓库状态”时，按标签匹配到记录，再由 Host 侧的 SSH / HTTP 工具通过 `ctx.credentials` 解析私钥或令牌并直接使用。
