@@ -146,7 +146,8 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 printf '{"key":"%s","host":"%s"}\\n' "$key" "$host" > '${marker}'
-printf 'key_mode=%s\\n' "$(stat -f '%Lp' "$key" 2>/dev/null || stat -c '%a' "$key" 2>/dev/null)"
+mode=$(stat -c '%a' "$key" 2>/dev/null || stat -f '%Lp' "$key" 2>/dev/null)
+printf 'key_mode=%s\\n' "$mode"
 printf 'fake log line 1\\n'
 cat "$key"
 exit 0
