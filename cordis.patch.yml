@@ -1,0 +1,37 @@
+# dsh-credential-hub bundle patch.
+#
+# Inserts one Host row. The inventory is a metadata-only YAML document; secret
+# values live behind credentialRef names in the DSH credential store.
+- insert:
+    - id: credential-hub
+      name: dsh-credential-hub
+      config:
+        # Absolute path to the inventory. Empty means:
+        #   $DSH_CREDENTIAL_HUB_INVENTORY or <harness home>/credential-hub/inventory.yml
+        inventoryPath: ''
+        # Append the metadata-only credential overview to the system prompt.
+        promptSection: true
+        # Maximum entries listed per kind in that overview (match still sees all).
+        maxPromptEntriesPerKind: 20
+        # Default SSH command timeout.
+        sshTimeoutMs: 60000
+        # Default HTTP request timeout for credential_hub_pat_request.
+        httpTimeoutMs: 30000
+        # Per-stream / per-response capture limits.
+        maxOutputBytes: 65536
+        maxHttpResponseBytes: 262144
+        # PAT requests to 127.0.0.1 / ::1 over plain HTTP are allowed so local
+        # gateways can be tested. Non-loopback HTTP remains blocked.
+        allowLoopbackHttp: true
+        # A PAT is only sent to the origin of its record's baseUrl unless this
+        # is explicitly enabled. Keep false unless you understand the risk.
+        allowCrossOriginPat: false
+        # Following redirects can forward the Authorization header to another
+        # origin. Off by default; a 3xx is returned as a normal result.
+        followRedirects: false
+        # OpenSSH client settings.
+        sshBinary: ssh
+        sshConfigFile: ''
+        sshKnownHostsFile: ''
+        sshStrictHostKeyChecking: accept-new
+        sshConnectTimeoutMs: 10000

@@ -1,0 +1,96 @@
+
+> dsh-credential-hub@0.2.0 pretest
+> npm run check
+
+
+> dsh-credential-hub@0.2.0 check
+> node test/support/check-syntax.mjs
+
+Syntax check passed for 28 file(s).
+
+> dsh-credential-hub@0.2.0 test
+> node --test test/
+
+✔ encrypts and decrypts a payload without leaving plaintext in the envelope (102.13475ms)
+✔ a wrong passphrase fails generically (93.798125ms)
+✔ tampering with the ciphertext or tag is rejected (139.126042ms)
+✔ weak passphrases and unsupported KDF parameters are rejected (46.493959ms)
+✔ invalid envelopes are rejected without parsing plaintext (0.157ms)
+✔ client module has the bundle id, injects slots/locale, and seats one settings section (1.985625ms)
+✔ normalizes the sample inventory and applies SSH port defaults (5.05525ms)
+✔ missing tags are rejected rather than guessed (0.414417ms)
+✔ slash-shaped references are rejected with the POSIX grammar explanation (0.29125ms)
+✔ a secret pasted into the inventory is rejected without echoing its value (0.337042ms)
+✔ aliases are unique across both inventories (0.320333ms)
+✔ hosts and usernames cannot be parsed as ssh options (0.345ms)
+✔ PAT baseUrl cannot carry embedded credentials, a query, or a fragment (0.85975ms)
+✔ basic auth requires a username and header auth requires headerName (0.266834ms)
+✔ summaries contain metadata only and escape prompt braces (0.183958ms)
+✔ summary truncation reports the omitted count (0.088541ms)
+✔ inventory creation is 0600 and an owner-only file stays usable (1.546042ms)
+✔ YAML parser errors cite line numbers without echoing source content (0.525ms)
+✔ a broken edit keeps the last good prompt snapshot and fails tool reads (1.760417ms)
+✔ scenario A query routes to the production web host only (1.008084ms)
+✔ scenario B query routes to the production GitHub token only (0.161375ms)
+✔ Chinese environment synonyms hit English tags (5.737416ms)
+✔ a weak shared fragment cannot drag in an unrelated host (0.181292ms)
+✔ kind-only queries list every record of that kind (0.22075ms)
+✔ kind filter narrows the search before scoring (0.131083ms)
+✔ alias and tag fragments are matchable (0.239542ms)
+✔ no match returns an empty array, not everything (0.202458ms)
+✔ match results carry metadata and never a value (0.171541ms)
+✔ tokenizer keeps ASCII parts and CJK n-grams (0.105625ms)
+✔ scores are ordered best first (0.449833ms)
+✔ registers the overview after first-party tool guidance and before the tools SDK (5.934042ms)
+✔ renders aliases, tags, descriptions, and refs but never values or connection details (1.438375ms)
+✔ empty inventories render explicit empty summaries (0.670958ms)
+✔ the prompt provider keeps working during a broken edit (2.315542ms)
+✔ redactor covers raw, URL-encoded, base64, and PEM lines (0.475625ms)
+✔ prompt, match, resolve, SSH, and PAT outputs contain no secret value (682.154458ms)
+✔ errors raised by tools do not contain the resolved secret (1.527583ms)
+✔ provider errors do not leak into model-visible tool errors (1.440167ms)
+✔ allowLoopbackHttp=false rejects loopback plain HTTP even for a local record (0.096542ms)
+✔ state returns metadata and presence facts only (6.217875ms)
+✔ state reports an unconfigured ref and works without a config editor (2.253458ms)
+✔ saveRecord adds and updates without touching secret values (6.82675ms)
+✔ saveRecord rejects secret fields without echoing their values (1.1955ms)
+✔ saveRecord rejects an invalid slash-shaped ref (1.033667ms)
+✔ invalid ref errors never echo a pasted secret-shaped value (0.934959ms)
+✔ deleteRecord removes one kind and reports a missing alias (2.267875ms)
+✔ exportBundle returns ciphertext and exports configured credentials (98.363584ms)
+✔ importBundle merges records and writes included credentials without echoing values (96.326208ms)
+✔ importBundle merge lets an imported alias win over the current record (97.018458ms)
+✔ importBundle replace mode clears the current inventory (93.602292ms)
+✔ importBundle writes the inventory and reports partial credential failures without leaking values (90.530709ms)
+✔ importBundle rejects an encrypted inventory that smuggles a secret field (89.130875ms)
+✔ importBundle rejects a wrong passphrase or tampered bundle before writing (139.896542ms)
+✔ state hides provider describe errors (0.845833ms)
+✔ writeInventory removes a newly created file when the post-write load fails (0.769459ms)
+✔ setCredential writes through the seam and returns no value (0.584708ms)
+✔ setCredential rejects empty values and invalid refs without echoing them (0.608583ms)
+✔ saveConfig persists only validated behavior fields through the editor (1.081125ms)
+✔ saveConfig reports a missing editor instead of pretending to save (0.602834ms)
+✔ routes return JSON errors for malformed, unknown, missing, and read-only actions (8.630209ms)
+✔ authenticated routes expose state and actions without secrets (95.511375ms)
+✔ match returns metadata for scenario A and never reads credentials (6.159709ms)
+✔ match returns an empty array when nothing is anchored (1.482875ms)
+✔ match rejects an empty query (1.207416ms)
+✔ resolve reports existence and a fixed mask, never the value (1.549125ms)
+✔ resolve reports an unconfigured ref without throwing (1.367625ms)
+✔ resolve errors never echo a secret-shaped ref (1.372125ms)
+✔ resolve rejects a slash-shaped key with the ref grammar error (0.911334ms)
+✔ ssh_exec uses the resolved key, cleans it up, and redacts echoed key material (1053.493708ms)
+✔ ssh_exec refuses a PAT ref and an unknown alias (2.176792ms)
+✔ PAT request attaches the secret Host-side and redacts an echoing response (18.4385ms)
+✔ PAT request refuses cross-origin URLs and injected auth headers (1.666625ms)
+✔ PAT redirects are returned, not followed (4.461958ms)
+✔ PAT request without baseUrl requires https (1.024583ms)
+✔ tool results satisfy their declared output schemas (624.619541ms)
+ℹ tests 75
+ℹ suites 0
+ℹ pass 75
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1820.498042

@@ -1,0 +1,42 @@
+# Example inventory for dsh-credential-hub.
+#
+# Copy to $DSH_HOME/credential-hub/inventory.yml (or point the plugin
+# `inventoryPath` config at this file). This document stores credential
+# REFERENCES only. Never put a private key, PAT, password, or passphrase here.
+version: 1
+
+ssh:
+  - alias: prod-web-01
+    tags: ["env:production", "service:web"]
+    description: 生产环境 Web 应用主机
+    host: 10.0.0.10
+    port: 22
+    username: deploy
+    # POSIX identifier; the value lives in the DSH credential store.
+    credentialRef: SSH_PROD_WEB_KEY
+
+  - alias: staging-db
+    tags: ["env:staging", "service:db"]
+    description: 测试环境数据库主机
+    host: 10.0.1.20
+    port: 22
+    username: deploy
+    credentialRef: SSH_STAGING_DB_KEY
+
+pat:
+  - alias: github-prod-token
+    tags: ["platform:github", "env:production"]
+    description: GitHub 生产环境令牌
+    platform: github
+    # The PAT is only sent to this origin (unless allowCrossOriginPat is on).
+    baseUrl: https://api.github.com
+    authScheme: bearer
+    credentialRef: PAT_GITHUB_PROD
+
+  - alias: gitlab-staging-token
+    tags: ["platform:gitlab", "env:staging"]
+    description: GitLab 测试环境令牌
+    platform: gitlab
+    baseUrl: https://gitlab.example.com
+    authScheme: bearer
+    credentialRef: PAT_GITLAB_STAGING

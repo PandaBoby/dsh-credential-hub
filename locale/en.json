@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Credential Hub",
+    "description": "Route SSH hosts and PAT tokens by tags: manage the inventory and runtime config in Settings, keep the prompt metadata-only, and resolve secrets on the Host for SSH or HTTP operations.",
+    "detail": "README.md"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "queriedAt": "2026-11-18T18:32:56+08:00",
+  "dshVersion": "0.2.2-rc.3",
+  "profile": "desktop",
+  "settings.section": [
+    {
+      "id": "account",
+      "order": -10,
+      "active": true
+    },
+    {
+      "id": "general",
+      "order": 0,
+      "active": true
+    },
+    {
+      "id": "models",
+      "order": 10,
+      "active": true
+    },
+    {
+      "id": "agent-presets",
+      "order": 20,
+      "active": true
+    },
+    {
+      "id": "dsh-session-archive",
+      "order": 25,
+      "active": true
+    },
+    {
+      "id": "credential-hub",
+      "order": 30,
+      "active": true
+    },
+    {
+      "id": "web-ui-plugins",
+      "order": 110,
+      "active": true
+    }
+  ],
+  "settings.section.icon": [
+    {
+      "id": "credential-hub",
+      "active": true
+    }
+  ],
+  "note": "Live Client Slots inspection. Rendered visual verification is not included; see docs/ui-verification.md."
+}

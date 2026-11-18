@@ -1,0 +1,88 @@
+{
+  "name": "dsh-credential-hub",
+  "version": "0.2.0",
+  "description": "Credential routing hub for DeepSeek Harness: tag-matched SSH hosts and PAT tokens, a Settings inventory/config UI, metadata-only prompt inventory, and Host-side secret resolution.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./client": "./client.js"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "examples",
+    "docs",
+    "test",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.2-rc.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-credentials": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-credentials": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "yaml": "^2.8.0"
+  },
+  "scripts": {
+    "check": "node test/support/check-syntax.mjs",
+    "pretest": "npm run check",
+    "test": "node --test test/",
+    "test:unit": "node --test test/inventory.test.mjs test/matching.test.mjs test/tools.test.mjs test/prompt.test.mjs test/security.test.mjs test/settings.test.mjs test/client.test.mjs test/bundle.test.mjs",
+    "test:security": "node --test test/security.test.mjs",
+    "test:live": "node test/live-scenarios.mjs --live"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "credentials",
+    "ssh",
+    "pat",
+    "routing"
+  ],
+  "license": "MIT",
+  "author": "PandaBoby",
+  "devDependencies": {
+    "ssh2": "^1.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PandaBoby/dsh-credential-hub.git"
+  },
+  "homepage": "https://github.com/PandaBoby/dsh-credential-hub#readme",
+  "bugs": {
+    "url": "https://github.com/PandaBoby/dsh-credential-hub/issues"
+  }
+}

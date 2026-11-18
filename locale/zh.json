@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "凭据路由中枢",
+    "description": "按标签路由 SSH 主机与 PAT 令牌：Settings 内管理清单和运行配置，提示词只含元数据，匹配后在 Host 侧解析密钥并执行 SSH 或 HTTP 操作。",
+    "detail": "README.md"
+  }
+}

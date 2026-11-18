@@ -1,0 +1,26 @@
+Secret scan: PASS
+
+Scanned:
+- system prompt section rendered from the same inventory
+- scenario A JSONL (model thinking, tool calls, tool results, final text)
+- scenario B JSONL (model thinking, tool calls, tool results, final text)
+- stderr of both headless runs
+
+Secret variants: raw SSH private key, PEM body lines, raw PAT, URL-encoded PAT, base64 PAT.
+No match was found.
+
+Post-review unit checks (source-level, not part of the original live scan):
+- credentialRef validation errors and credential_hub_resolve errors do not echo a
+  secret-shaped input value (test/inventory.test.mjs, test/tools.test.mjs,
+  test/settings.test.mjs).
+- Settings state/action responses contain no provider masked preview or value
+  (test/settings.test.mjs).
+- The settings UI has a write-only password input; save-record still rejects
+  privateKey/token/password fields, and values go only through set-credential or
+  import-bundle (client.js, src/settings.js).
+- Encrypted bundle tests assert the ciphertext response and inventory file contain no
+  plaintext, wrong passphrases/tampered envelopes fail, and imported secret fields are
+  rejected before writing (test/bundle.test.mjs, test/settings.test.mjs).
+- allowLoopbackHttp=false rejects loopback HTTP, and provider errors are reduced to a
+  generic message before they reach a tool result or the browser (test/security.test.mjs,
+  test/settings.test.mjs).

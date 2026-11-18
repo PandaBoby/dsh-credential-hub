@@ -1,0 +1,13 @@
+node_modules/
+coverage/
+*.log
+.DS_Store
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+# A real inventory and exported encrypted bundles are secrets.
+inventory.yml
+*.dshcredhub.json
+*.tmp-*

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Credential Hub">
+  <defs>
+    <linearGradient id="shield" x1="10" y1="6" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1b2a3a"/>
+      <stop offset="1" stop-color="#0d151d"/>
+    </linearGradient>
+    <linearGradient id="route" x1="18" y1="32" x2="46" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b1117"/>
+  <path d="M32 6 53 14v16c0 13-8.6 22.4-21 28C19.6 52.4 11 43 11 30V14L32 6Z" fill="url(#shield)" stroke="#2b3f52" stroke-width="2"/>
+  <path d="M32 12 47 18v12c0 10-6.2 17.3-15 22-8.8-4.7-15-12-15-22V18l15-6Z" fill="none" stroke="#3d566c" stroke-width="1.5"/>
+  <circle cx="32" cy="28" r="5.5" fill="none" stroke="#f3f6f8" stroke-width="3"/>
+  <path d="M32 33.5V41" stroke="#f3f6f8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M15 47c8-5 14-5 21 0" fill="none" stroke="url(#route)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M49 47c-8-5-14-5-21 0" fill="none" stroke="url(#route)" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="15" cy="47" r="2.5" fill="#5eead4"/>
+  <circle cx="49" cy="47" r="2.5" fill="#60a5fa"/>
+</svg>
