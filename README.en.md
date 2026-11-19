@@ -36,7 +36,7 @@
 > AES-256-GCM ciphertext only.
 
 <p align="center">
-  <img src="docs/assets/hero.png" alt="dsh-credential-hub: metadata in the prompt, secrets on the Host" width="100%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/hero.png" alt="dsh-credential-hub: metadata in the prompt, secrets on the Host" width="100%" />
 </p>
 
 `dsh-credential-hub` adds a **credential routing layer** to
@@ -88,12 +88,12 @@ page supports write-only value entry and AES-256-GCM encrypted transfer between 
 ## Screenshots
 
 <p align="center">
-  <img src="docs/assets/settings.png" alt="Credential Routing Hub SSH host list with configured badges, tags, target and credentialRef" width="48%" />
-  <img src="docs/assets/settings-pat.png" alt="PAT token list with platform, baseUrl, auth scheme and credentialRef" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings.png" alt="Credential Routing Hub SSH host list with configured badges, tags, target and credentialRef" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-pat.png" alt="PAT token list with platform, baseUrl, auth scheme and credentialRef" width="48%" />
 </p>
 <p align="center">
-  <img src="docs/assets/settings-form.png" alt="Record editor showing the write-only credential value field" width="48%" />
-  <img src="docs/assets/settings-transfer.png" alt="Import/export tab with AES-256-GCM passphrase fields and merge/replace modes" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-form.png" alt="Record editor showing the write-only credential value field" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-transfer.png" alt="Import/export tab with AES-256-GCM passphrase fields and merge/replace modes" width="48%" />
 </p>
 <p align="center"><sub>Real DSH Settings UI: SSH/PAT inventories, write-only values, and encrypted import/export. Isolated profile with sample inventory; no real credentials.</sub></p>
 

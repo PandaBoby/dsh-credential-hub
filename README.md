@@ -35,7 +35,7 @@
 > 该 origin；导出的同步包只包含 AES-256-GCM 密文。
 
 <p align="center">
-  <img src="docs/assets/hero.png" alt="dsh-credential-hub：提示词里只有元数据，秘密留在 Host" width="100%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/hero.png" alt="dsh-credential-hub：提示词里只有元数据，秘密留在 Host" width="100%" />
 </p>
 
 `dsh-credential-hub` 为 [DeepSeek Harness](https://github.com/deepseek-ai) 提供一层**凭据路由**：
@@ -80,12 +80,12 @@ AES-256-GCM 加密的换机同步。
 ## 界面
 
 <p align="center">
-  <img src="docs/assets/settings.png" alt="凭据路由中枢 SSH 主机列表，显示已配置状态、标签、目标与 credentialRef" width="48%" />
-  <img src="docs/assets/settings-pat.png" alt="PAT 令牌列表，显示平台、baseUrl、认证方式和 credentialRef" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings.png" alt="凭据路由中枢 SSH 主机列表，显示已配置状态、标签、目标与 credentialRef" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-pat.png" alt="PAT 令牌列表，显示平台、baseUrl、认证方式和 credentialRef" width="48%" />
 </p>
 <p align="center">
-  <img src="docs/assets/settings-form.png" alt="记录编辑器中的 write-only 凭据值字段" width="48%" />
-  <img src="docs/assets/settings-transfer.png" alt="导入导出页签，AES-256-GCM 口令输入与合并/替换导入" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-form.png" alt="记录编辑器中的 write-only 凭据值字段" width="48%" />
+  <img src="https://raw.githubusercontent.com/PandaBoby/dsh-credential-hub/main/docs/assets/settings-transfer.png" alt="导入导出页签，AES-256-GCM 口令输入与合并/替换导入" width="48%" />
 </p>
 <p align="center"><sub>真实 DSH 设置页：SSH/PAT 清单、write-only 凭据值和加密导入/导出。使用隔离 profile 与示例清单，无真实凭据。</sub></p>
 

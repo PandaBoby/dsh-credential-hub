@@ -1,6 +1,6 @@
 {
   "name": "dsh-credential-hub",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Credential routing hub for DeepSeek Harness: tag-matched SSH hosts and PAT tokens, metadata-only prompts, write-only Settings values, Host-side resolution, and AES-256-GCM encrypted import/export.",
   "type": "module",
   "main": "index.js",

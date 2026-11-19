@@ -11,6 +11,13 @@ All notable changes to this project are documented here. The format follows
 - Publish the package with the current bilingual README, npm install command, and npm badge.
 - Improve the npm description and keywords, and declare `publishConfig.access = public`.
 
+## [0.2.3] - 2026-11-19
+
+### Documentation
+
+- Publish the hero banner and real Settings screenshots from absolute GitHub raw URLs so the
+  npm package page can render them as well as the GitHub README.
+
 ## [Unreleased]
 
 ### Packaging
