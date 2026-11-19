@@ -7,6 +7,19 @@
 
 ## 已完成的验证
 
+### 0. 实机截图
+
+2026-11-19 使用隔离的 DSH profile（临时 `DSH_HOME`、示例清单、假 env 值）启动真实 Web UI，
+通过 `agent-browser` 截取浅色主题的桌面设置页：
+
+- [`assets/settings.png`](./assets/settings.png)：SSH 主机列表与已配置状态
+- [`assets/settings-pat.png`](./assets/settings-pat.png)：PAT 令牌列表
+- [`assets/settings-form.png`](./assets/settings-form.png)：write-only 凭据值字段
+- [`assets/settings-transfer.png`](./assets/settings-transfer.png)：AES-256-GCM 导入/导出
+
+截图中是示例主机与假凭据来源，不包含真实私钥、PAT 或用户清单。隔离 profile 与临时浏览器
+在截图后删除；未修改用户现有 profile。
+
 ### 1. 菜单与图标已注册并激活
 
 通过 live Client Slots 查询（机器可读摘要见 [`verification/ui-slots.json`](./verification/ui-slots.json)）：
@@ -104,24 +117,20 @@ settings.section.icon occupants:
 - 服务端字段错误仍是英文并可能带 `ssh[0]` 下标；客户端已做主要必填校验，但没有逐字段本地化映射。
 - 表单提示已精简为必要的凭据值 hint；其余字段依赖 label/placeholder。
 
-## 未完成的验证
+## 尚未覆盖
 
-本次验收未使用浏览器自动化，也没有另起浏览器或复用鉴权 token：
+本次已用真实 Web UI 截取浅色桌面界面（1600×1057），以下仍未覆盖：
 
-- `http://127.0.0.1:62232` 是带会话鉴权的 GUI，直接请求返回 401；
-- 没有用 mock 页面替代真实截图。
+- 深色主题；
+- 约 600px 窄窗口/移动端布局；
+- 真实用户 profile 的下载、跨电脑导入和口令错误交互；
+- 渲染级自动化测试（截图是人工审查证据，不是 DOM 断言）。
 
-因此以下项目**没有**视觉确认，需要在 GUI 里人工检查：
+建议在 GUI 中继续检查：
 
-1. 刷新页面后 Settings 左侧出现「凭据路由中枢」及自定义图标；
-2. 切换浅色/深色主题，确认文字、边框、状态徽标、按钮对比度；
-3. 打开四个页签，新增一条 SSH 与一条 PAT（使用测试 ref 和测试凭据值），确认保存后列表刷新、徽标变“已配置”、密码框被清空；
-4. 编辑一条记录改 alias，确认旧 alias 消失；删除需要二次确认；
-5. 刷新页面后确认凭据值输入框始终为空、不回显已保存的值；再到 Settings → 账户（Account）或 `ctx.credentials.set` 替换一次，回来确认“已配置”及来源变化；
-6. 运行配置中切换一个字段并保存，确认重启提示、面板重新加载后值仍保留；
-7. 切换到“导入 / 导出”，输入两次口令（≥8 位）导出，确认浏览器下载加密文件；
-8. 在另一台机器导入同一文件，分别试合并/替换，确认记录和徽标；错误口令应报错且不清空清单；
-9. 窄窗口（约 600px）确认双列表单变单列、无横向溢出；
-10. 浏览器控制台无 `slot entry crashed in 'settings.section'` 或其他 React 错误。
+1. 切换深色主题，确认文字、边框、状态徽标、按钮对比度；
+2. 窄窗口确认双列表单变单列、无横向溢出；
+3. 在真实 profile 中导入/导出一次，并验证错误口令不会写入清单；
+4. 浏览器控制台无 `slot entry crashed in 'settings.section'` 或其他 React 错误。
 
 如果上述任一项失败，请把控制台错误和截图贴回，我会按实际 DOM/React 报错修复。

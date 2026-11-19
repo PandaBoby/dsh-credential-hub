@@ -23,6 +23,8 @@ All notable changes to this project are documented here. The format follows
   Node badges, quick links, one-line install, table of contents, Mermaid architecture diagram,
   example flows, documentation index, troubleshooting table, disclaimer, and clearer
   configuration/security sections.
+- Add a project-specific hero banner and four real DSH Settings screenshots captured from an
+  isolated sample profile (no real credentials or user inventory).
 
 ## [0.2.1] - 2026-11-18
 
