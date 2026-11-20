@@ -59,6 +59,24 @@ function text(value, fallback = '') {
 }
 
 /**
+ * Normalize the shape of a multi-line secret — an SSH private key — before it
+ * reaches the credential store. The store renders a value as a `|` block
+ * scalar only when every line is LF-terminated and none keeps trailing
+ * whitespace; otherwise YAML falls back to a folded scalar (which a reader
+ * gets back with the line breaks turned into spaces) or to a double-quoted
+ * one. A single-line token is returned untouched, so no trailing newline can
+ * leak into an HTTP header.
+ * @param {string} value
+ * @returns {string}
+ */
+function normalizeSecretValue(value) {
+  if (!value.includes('\n') && !value.includes('\r')) return value
+  const lines = value.replace(/\r\n?/g, '\n').split('\n').map((line) => line.replace(/[ \t]+$/, ''))
+  while (lines.length > 0 && lines.at(-1) === '') lines.pop()
+  return `${lines.join('\n')}\n`
+}
+
+/**
  * Accept a UI comma-separated tag string as well as a JSON array; the Host is
  * the authority, so it normalizes both instead of trusting the browser.
  * @param {unknown} value
@@ -579,12 +597,12 @@ export class CredentialHubSettings {
   async setCredential(input) {
     if (!isObject(input)) throw new CredentialHubError('RECORD_INVALID', 'credential payload must be an object')
     const ref = text(input.ref)
-    const value = typeof input.value === 'string' ? input.value : ''
+    const value = normalizeSecretValue(typeof input.value === 'string' ? input.value : '')
     if (ref === '') throw new CredentialHubError('CREDENTIAL_REF_INVALID', 'credentialRef is required')
     if (!this.hub.validateRef(ref)) {
       throw new CredentialHubError('CREDENTIAL_REF_INVALID', 'credentialRef must be a POSIX identifier such as SSH_PROD_WEB_KEY')
     }
-    if (value === '') throw new CredentialHubError('CREDENTIAL_VALUE_EMPTY', 'credential value must not be empty; leave the field blank to keep the existing value')
+    if (value.trim() === '') throw new CredentialHubError('CREDENTIAL_VALUE_EMPTY', 'credential value must not be empty; leave the field blank to keep the existing value')
     if (Buffer.byteLength(value, 'utf8') > MAX_SECRET_BYTES) {
       throw new CredentialHubError('CREDENTIAL_VALUE_TOO_LARGE', `credential value must be at most ${MAX_SECRET_BYTES} bytes`)
     }

@@ -75,3 +75,10 @@ test('client module has the bundle id, injects slots/locale, and seats one setti
     assert.equal(typeof en[key], 'string')
   }
 })
+
+test('the secret field is a multi-line control so a pasted key keeps its line breaks', () => {
+  const source = readFileSync('client.js', 'utf8')
+  // A single-line <input> turns a pasted key's line breaks into spaces, and the
+  // store then saves that one-line value as a folded YAML scalar.
+  assert.match(source, /h\('textarea', \{\s+id: 'credhub-secret'/)
+})

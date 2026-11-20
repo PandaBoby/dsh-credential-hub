@@ -20,6 +20,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Saving a pasted SSH private key keeps its line breaks. The Settings secret field is now a
+  textarea: an `<input>` collapses a pasted key's line breaks into spaces, and the credential
+  store then serialized that one-line value as a folded YAML scalar. A multi-line value is also
+  normalized to LF with exactly one trailing newline before it is written, so the store renders
+  it as a `|` block scalar.
+
 ### Packaging
 
 - Publish `0.2.1` to npm; install with `dsh plugin --profile <profile> add dsh-credential-hub`.

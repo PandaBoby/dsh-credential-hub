@@ -84,7 +84,7 @@ window.__ModuleLoader__.load({
       descriptionPlaceholder: '生产环境 Web 应用主机',
       fieldSecret: '凭据值（私钥 / PAT）',
       fieldSecretPlaceholder: '粘贴私钥或令牌；不会显示',
-      fieldSecretHint: '留空不修改；只写入凭据存储，不回显。',
+      fieldSecretHint: '留空不修改；只写入凭据存储，不回显。私钥整段粘贴（含 BEGIN/END 行），换行会原样保存。',
       recordSavedWithCredential: '已保存 {alias}，凭据值已写入。',
       credentialWriteFailed: '记录已保存，但凭据值写入失败；请检查凭据存储后重试。',
       fieldRef: 'credentialRef',
@@ -207,7 +207,7 @@ window.__ModuleLoader__.load({
       descriptionPlaceholder: 'Production web app host',
       fieldSecret: 'Credential value (key / PAT)',
       fieldSecretPlaceholder: 'Paste a private key or token; never displayed',
-      fieldSecretHint: 'Leave blank to keep the current value; written only to the credential store, never shown.',
+      fieldSecretHint: 'Leave blank to keep the current value; written only to the credential store, never shown. Paste a whole private key, BEGIN/END lines included: its line breaks are kept.',
       recordSavedWithCredential: 'Saved {alias}; credential value stored.',
       credentialWriteFailed: 'Record saved, but the credential value could not be stored; check the credential store and retry.',
       fieldRef: 'credentialRef',
@@ -280,6 +280,9 @@ window.__ModuleLoader__.load({
       .credhub-toolbar .credhub-grow { flex: 1 1 auto; min-width: 160px; }
       .credhub-input, .credhub-select, .credhub-textarea { width: 100%; min-height: 30px; padding: 5px 9px; color: var(--dsw-alias-label-primary); background: var(--dsw-alias-bg-base); border: 1px solid var(--dsw-alias-border-l2); border-radius: 6px; font: inherit; }
       .credhub-textarea { min-height: 58px; resize: vertical; }
+      /* A textarea is the only control that keeps a pasted key's line breaks;
+         the disc rule preserves the masking <input type="password"> gave it. */
+      .credhub-secret { -webkit-text-security: disc; }
       .credhub-input::placeholder, .credhub-textarea::placeholder { color: var(--dsw-alias-state-idle-primary); }
       .credhub-btn { appearance: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding: 4px 11px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 6px; color: var(--dsw-alias-label-primary); background: var(--dsw-alias-bg-layer-2); font: inherit; cursor: pointer; white-space: nowrap; }
       .credhub-btn:hover { border-color: var(--dsw-alias-border-l2); }
@@ -510,10 +513,13 @@ window.__ModuleLoader__.load({
           ),
           h('div', { className: 'credhub-field credhub-field-wide' },
             h('label', { className: 'credhub-label', htmlFor: 'credhub-secret' }, t('fieldSecret')),
-            h('input', {
-              id: 'credhub-secret', className: 'credhub-input', type: 'password', value: values.secret ?? '',
+            // An <input> collapses a pasted key's line breaks into spaces; a
+            // textarea is the only control that keeps them, which is what lets
+            // the credential store save the value as a '|' block scalar.
+            h('textarea', {
+              id: 'credhub-secret', className: 'credhub-textarea credhub-mono credhub-secret', value: values.secret ?? '',
               placeholder: t('fieldSecretPlaceholder'), onChange: set('secret'), spellCheck: false,
-              autoComplete: 'new-password', 'aria-describedby': 'credhub-secret-hint',
+              autoComplete: 'off', rows: 3, 'aria-describedby': 'credhub-secret-hint',
             }),
             h('span', { id: 'credhub-secret-hint', className: 'credhub-hint' }, t('fieldSecretHint')),
           ),

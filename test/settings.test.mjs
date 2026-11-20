@@ -5,6 +5,7 @@ import { resolveConfig } from '../src/config.js'
 import { CredentialHubSettings } from '../src/settings.js'
 import { decryptBundle, encryptBundle } from '../src/bundle.js'
 import { registerSettingsRoutes } from '../src/settings-routes.js'
+import { stringify } from 'yaml'
 import { fixture, PAT, SSH_SECRET } from './helpers.mjs'
 
 /**
@@ -441,6 +442,24 @@ test('setCredential rejects empty values and invalid refs without echoing them',
       assert.equal(error.message.includes(pasted), false)
       return true
     },
+  )
+})
+
+test('setCredential keeps a pasted private key multi-line so the store writes a block scalar', async (t) => {
+  const f = fixture()
+  t.after(f.dispose)
+  const { settings, written } = harness(f)
+  // A textarea paste can arrive without the trailing newline, or with CRLF
+  // line endings; both must reach the store as the canonical LF key.
+  await settings.setCredential({ ref: 'SSH_PROD_WEB_KEY', value: SSH_SECRET.replace(/\n$/, '') })
+  assert.equal(written.get('SSH_PROD_WEB_KEY'), SSH_SECRET)
+  await settings.setCredential({ ref: 'SSH_STAGING_DB_KEY', value: SSH_SECRET.replace(/\n/g, '\r\n') })
+  assert.equal(written.get('SSH_STAGING_DB_KEY'), SSH_SECRET)
+  const rendered = stringify({ refs: { SSH_PROD_WEB_KEY: written.get('SSH_PROD_WEB_KEY') } })
+  assert.match(rendered, /SSH_PROD_WEB_KEY: \|\n {4}-----BEGIN OPENSSH PRIVATE KEY-----\n/)
+  await assert.rejects(
+    () => settings.setCredential({ ref: 'PAT_GITHUB_PROD', value: '\n  \n' }),
+    /must not be empty/,
   )
 })
 
