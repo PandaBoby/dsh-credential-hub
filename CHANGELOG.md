@@ -18,7 +18,7 @@ All notable changes to this project are documented here. The format follows
 - Publish the hero banner and real Settings screenshots from absolute GitHub raw URLs so the
   npm package page can render them as well as the GitHub README.
 
-## [Unreleased]
+## [0.2.4] - 2026-11-20
 
 ### Fixed
 
@@ -27,6 +27,8 @@ All notable changes to this project are documented here. The format follows
   store then serialized that one-line value as a folded YAML scalar. A multi-line value is also
   normalized to LF with exactly one trailing newline before it is written, so the store renders
   it as a `|` block scalar.
+
+## [Unreleased]
 
 ### Packaging
 
